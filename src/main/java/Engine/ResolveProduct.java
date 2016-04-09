@@ -24,9 +24,9 @@ public class ResolveProduct {
 
 		List offers = scrapOffers(productNameTr);
 
-		List best = agregateOffers(offers);
+		//List best = agregateOffers(offers);
 
-		store(best);
+		store(offers);
 
 		// TODO? send feedback
 	}
