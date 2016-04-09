@@ -1,5 +1,7 @@
 package spring;
 
+import db.AlexaDAO;
+import db.AlexaDAOImpl;
 import engine.ResolveProduct;
 import engine.ResolveProductImpl;
 import org.springframework.boot.SpringApplication;
@@ -17,6 +19,11 @@ public class Application {
 	@Bean
 	ResolveProduct resolveProduct() throws ConnectionException {
 		return new ResolveProductImpl();
+	}
+
+	@Bean
+	AlexaDAO alexaDAO() {
+		return new AlexaDAOImpl();
 	}
 
 	public static void main(String[] args) {

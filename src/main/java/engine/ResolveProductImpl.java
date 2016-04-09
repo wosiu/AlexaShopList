@@ -1,21 +1,28 @@
 package engine;
 
 import org.apache.commons.lang3.StringUtils;
+import db.AlexaDAO;
+import db.Offer;
+import db.Search;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import pl.edu.mimuw.students.wosiu.scraper.ConnectionException;
+import pl.edu.mimuw.students.wosiu.scraper.ProductResult;
 import pl.edu.mimuw.students.wosiu.scraper.alexa.*;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Scope("singleton")
 public class ResolveProductImpl implements ResolveProduct{
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	AlexaDAO dao;
+
 	private TranslateExecutor translator = null;
 	private ProductScrapExecutor scraper = null;
 
@@ -57,8 +64,25 @@ public class ResolveProductImpl implements ResolveProduct{
 		return Arrays.asList(offers.get(0));
 	}
 
-	private void store(List best) {
-		logger.info("Store, size: " + best.size());
-		// TODO !
+	private void store(List<ProductResult> best) {
+		if (best != null && !best.isEmpty()) {
+			final ProductResult pr = best.get(0);
+			final Long idSearch = dao.addSearch(new Search(pr.getSearchURL(), 1, new Date()));
+
+			List<Offer> offers = new LinkedList<>();
+			best.stream().forEach(s -> {
+						final Offer offer = new Offer(s.getProduct(), s.getPrice(), s.getShop(), s.getShopURL(), idSearch);
+						final Long offerId = dao.addOffer(offer);
+						offer.setId(offerId);
+						offers.add(offer);
+					}
+			);
+
+			final Optional<Offer> min =
+					offers.stream().min((o1, o2) -> Float.compare(Float.valueOf(o1.getPrice()), Float.valueOf(o2.getPrice())));
+			dao.updateSearch(idSearch, min.get().getId());
+		} else {
+			logger.warn("Trying to store empty best");
+		}
 	}
 }
