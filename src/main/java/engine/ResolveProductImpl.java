@@ -1,6 +1,8 @@
 package engine;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import pl.edu.mimuw.students.wosiu.scraper.ConnectionException;
 import pl.edu.mimuw.students.wosiu.scraper.alexa.*;
@@ -9,9 +11,9 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-//@Scope("singleton")
+@Scope("singleton")
 public class ResolveProductImpl implements ResolveProduct{
-	private static final Logger logger = Logger.getLogger(ResolveProductImpl.class);
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private TranslateExecutor translator = null;
 	private ProductScrapExecutor scraper = null;
 
