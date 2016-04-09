@@ -1,5 +1,7 @@
 package spring;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import json.ResolveResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +30,17 @@ public class AlexaController {
 	ResolveResponse resolve(@PathVariable String productName) {
 		log.info("Received resolve request for product - " + productName);
 		ResolveResponse resp = alexaService.resolve(productName);
-		log.info("Response to send - " + resp.toString());
+		log.info("Response to send - " + getStringFromJson(resp));
 		return resp;
 	}
 
+	public static String getStringFromJson(Object message) {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return mapper.writeValueAsString(message);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
