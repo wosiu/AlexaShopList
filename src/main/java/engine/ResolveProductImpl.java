@@ -1,18 +1,21 @@
-package Engine;
+package engine;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 import pl.edu.mimuw.students.wosiu.scraper.ConnectionException;
 import pl.edu.mimuw.students.wosiu.scraper.alexa.*;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class ResolveProduct {
-	private static final Logger logger = Logger.getLogger(ResolveProduct.class);
+@Service
+//@Scope("singleton")
+public class ResolveProductImpl implements ResolveProduct{
+	private static final Logger logger = Logger.getLogger(ResolveProductImpl.class);
 	private TranslateExecutor translator = null;
 	private ProductScrapExecutor scraper = null;
 
-	public ResolveProduct() throws ConnectionException {
+	public ResolveProductImpl() throws ConnectionException {
 		translator = new TranslateExecutor();
 		scraper = new ProductScrapExecutor();
 	}
