@@ -1,5 +1,6 @@
 package spring;
 
+import engine.EngineRuntimeException;
 import engine.ResolveProduct;
 import json.ResolveResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,13 @@ public class AlexaServiceImpl implements AlexaService {
 	@Override
 	public ResolveResponse resolve(String productName) {
 		final ResolveResponse resolve = new ResolveResponse();
-		//resolveProduct.resolve(productName);
-		resolve.setStatus("OK");
+		try {
+			resolveProduct.resolve(productName);
+			resolve.setStatus("OK");
+		} catch(EngineRuntimeException e) {
+			resolve.setStatus("FAIL");
+			resolve.setMsg(e.getMessage());
+		}
 		return resolve;
 	}
 }

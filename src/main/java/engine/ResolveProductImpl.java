@@ -1,9 +1,11 @@
 package engine;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import pl.edu.mimuw.students.wosiu.scraper.ConnectionException;
 import pl.edu.mimuw.students.wosiu.scraper.alexa.*;
 
@@ -26,8 +28,15 @@ public class ResolveProductImpl implements ResolveProduct{
 		// translate
 		logger.info("Resolve product: " + productName);
 		String productNameTr = translator.translate(productName);
+		if (StringUtils.isBlank(productNameTr )) {
+			throw new EngineRuntimeException("Cannot translate product");
+		}
+		logger.info("Translated: " + productName);
 
 		List offers = scrapOffers(productNameTr);
+		if (offers == null || offers.isEmpty()) {
+			throw new EngineRuntimeException("Couldn't scrap products from shops");
+		}
 
 		//List best = agregateOffers(offers);
 

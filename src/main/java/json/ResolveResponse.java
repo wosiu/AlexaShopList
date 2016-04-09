@@ -10,7 +10,14 @@ public class ResolveResponse {
 		this.status = status;
 	}
 
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
 	String status;
-
-
+	String msg;
 }
