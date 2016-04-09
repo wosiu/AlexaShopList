@@ -19,6 +19,7 @@ import java.util.*;
 @Scope("singleton")
 public class ResolveProductImpl implements ResolveProduct{
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	public boolean TEST_MODE = false;
 
 	@Autowired
 	AlexaDAO dao;
@@ -47,7 +48,11 @@ public class ResolveProductImpl implements ResolveProduct{
 
 		//List best = agregateOffers(offers);
 
-		store(offers);
+		if (!TEST_MODE) {
+			store(offers);
+		} else {
+			System.out.println(offers);
+		}
 
 		// TODO? send feedback
 	}
