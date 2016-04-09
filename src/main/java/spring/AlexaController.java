@@ -27,7 +27,9 @@ public class AlexaController {
 	@ResponseBody
 	ResolveResponse resolve(@PathVariable String productName) {
 		log.info("Received resolve request for product - " + productName);
-		return alexaService.resolve(productName);
+		ResolveResponse resp = alexaService.resolve(productName);
+		log.info("Response to send - " + resp.toString());
+		return resp;
 	}
 
 }
