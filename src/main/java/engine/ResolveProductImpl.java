@@ -54,15 +54,13 @@ public class ResolveProductImpl implements ResolveProduct{
 
 	private List scrapOffers(String productNameTr) {
 		logger.info("Scrap: " + productNameTr);
-		// TODO in scraper...
 		return scraper.scrap(productNameTr);
 	}
 
-	private List agregateOffers(List offers) {
-		logger.info("Agregate offers, size: " + offers.size());
-		// TODO ! This is mock!
-		return Arrays.asList(offers.get(0));
-	}
+//	private List agregateOffers(List offers) {
+//		logger.info("Agregate offers, size: " + offers.size());
+//		return Arrays.asList(offers.get(0));
+//	}
 
 	private void store(List<ProductResult> best) {
 		if (best != null && !best.isEmpty()) {
