@@ -19,7 +19,7 @@ public class AlexaDAOImpl implements AlexaDAO {
 
 	public Long addSearch(final Search search) {
 		final String INSERT_SQL =
-				"INSERT INTO \"AlexaShopList_search\"(search_phrase, number, date, chosen_offer_id) VALUES(?, ?, ?, ?)";
+				"INSERT INTO \"AlexaShopList_search\"(search_phrase, number, date) VALUES(?, ?, ?)";
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(
 				connection -> {
@@ -28,7 +28,6 @@ public class AlexaDAOImpl implements AlexaDAO {
 					ps.setString(1, search.getSearchPhrase());
 					ps.setLong(2, search.getNumber());
 					ps.setDate(3, new java.sql.Date(search.getDate().getTime()));
-					ps.setLong(4, search.getChosenOfferId());
 					return ps;
 				},
 				keyHolder);
@@ -58,7 +57,7 @@ public class AlexaDAOImpl implements AlexaDAO {
 
 	@Override
 	public void updateSearch(Long idSearch, Long idChosenOffer) {
-		final String UPDATE_SQL = "UPDATE \"AlexaShopList_offer\" SET chosen_offer_id = ? WHERE id = ?";
+		final String UPDATE_SQL = "UPDATE \"AlexaShopList_search\" SET chosen_offer_id = ? WHERE id = ?";
 		jdbcTemplate.update(UPDATE_SQL, idChosenOffer, idSearch);
 	}
 }

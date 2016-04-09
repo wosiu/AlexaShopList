@@ -26,7 +26,7 @@ public class AlexaController {
 	@RequestMapping("/resolve/{productName}")
 	@ResponseBody
 	ResolveResponse resolve(@PathVariable String productName) {
-		log.info("Received resolve request");
+		log.info("Received resolve request for product - " + productName);
 		return alexaService.resolve(productName);
 	}
 

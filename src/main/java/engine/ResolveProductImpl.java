@@ -37,7 +37,8 @@ public class ResolveProductImpl implements ResolveProduct{
 		logger.info("Resolve product: " + productName);
 		String productNameTr = translator.translate(productName);
 		if (StringUtils.isBlank(productNameTr )) {
-			throw new EngineRuntimeException("Cannot translate product");
+//			throw new EngineRuntimeException("Cannot translate product");
+			productNameTr = productName;
 		}
 		logger.info("Translated: " + productName);
 
@@ -49,7 +50,7 @@ public class ResolveProductImpl implements ResolveProduct{
 		//List best = agregateOffers(offers);
 
 		if (!TEST_MODE) {
-			store(offers);
+			store(offers, productName);
 		} else {
 			System.out.println(offers);
 		}
@@ -67,10 +68,10 @@ public class ResolveProductImpl implements ResolveProduct{
 //		return Arrays.asList(offers.get(0));
 //	}
 
-	private void store(List<ProductResult> best) {
+	private void store(List<ProductResult> best, String productName) {
 		if (best != null && !best.isEmpty()) {
 			final ProductResult pr = best.get(0);
-			final Long idSearch = dao.addSearch(new Search(pr.getSearchURL(), 1, new Date()));
+			final Long idSearch = dao.addSearch(new Search(productName, 1, new Date()));
 
 			List<Offer> offers = new LinkedList<>();
 			best.stream().forEach(s -> {
