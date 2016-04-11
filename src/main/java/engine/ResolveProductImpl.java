@@ -1,9 +1,9 @@
 package engine;
 
-import org.apache.commons.lang3.StringUtils;
 import db.AlexaDAO;
 import db.Offer;
 import db.Search;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +11,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import pl.edu.mimuw.students.wosiu.scraper.ConnectionException;
 import pl.edu.mimuw.students.wosiu.scraper.ProductResult;
-import pl.edu.mimuw.students.wosiu.scraper.alexa.*;
+import pl.edu.mimuw.students.wosiu.scraper.alexa.ProductScrapExecutor;
+import pl.edu.mimuw.students.wosiu.scraper.alexa.TranslateExecutor;
 
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Scope("singleton")
@@ -35,14 +39,8 @@ public class ResolveProductImpl implements ResolveProduct{
 	public void resolve(String productName) {
 		// translate
 		logger.info("Resolve product: " + productName);
-		String productNameTr = translator.translate(productName);
-		if (StringUtils.isBlank(productNameTr )) {
-//			throw new EngineRuntimeException("Cannot translate product");
-			productNameTr = productName;
-		}
-		logger.info("Translated: " + productName);
 
-		List offers = scrapOffers(productNameTr);
+		List offers = scrapOffers(productName);
 		if (offers == null || offers.isEmpty()) {
 			throw new EngineRuntimeException("Couldn't scrap products from shops");
 		}
@@ -57,6 +55,20 @@ public class ResolveProductImpl implements ResolveProduct{
 
 		// TODO? send feedback
 	}
+
+	public void resolveEN(String productName) {
+		// translate
+		logger.info("Resolve product: " + productName);
+		String productNameTr = translator.translate(productName);
+		if (StringUtils.isBlank(productNameTr )) {
+//			throw new EngineRuntimeException("Cannot translate product");
+			productNameTr = productName;
+		}
+		logger.info("Translated: " + productName);
+
+		resolve(productNameTr);
+	}
+
 
 	private List scrapOffers(String productNameTr) {
 		logger.info("Scrap: " + productNameTr);
